@@ -4,25 +4,39 @@
 const { ActivityHandler, MessageFactory,Attachment, AttachmentLayoutTypes, CardFactory } = require('botbuilder');
 const axios = require('axios');
 const feedBack = require('./AdaptiveCards/feedbackTemplate.json');
+let prevQuestion = "";
 
 class EchoBot extends ActivityHandler {
     constructor() {
         super();
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
 
+        var input,output;
         this.onMessage(async (context, next) => {
             // const respose = axios.get('https://niraj-dasari-verbose-space-waffle-494p549v557fq56j-5000.preview.app.github.dev/get_text?data='+context.activity.text);
-            const api_end_point = 'https://niraj-dasari-verbose-space-waffle-494p549v557fq56j-5000.preview.app.github.dev/get_text'
-            const res = axios.post(api_end_point,context.activity);
+            input = context.activity;
+            var api_end_point = 'https://niraj-dasari-verbose-space-waffle-494p549v557fq56j-5000.preview.app.github.dev/get_text'
+            console.log(input.channelData)
+            if(context.activity.value?.feedback)
+            {
+                console.log('received feedback');
+                await context.sendActivity(MessageFactory.text(context.activity.value.feedback));
+                axios.get('https://niraj-dasari-verbose-space-waffle-494p549v557fq56j-5000.preview.app.github.dev?data='+prevQuestion);
+                return;
+            }
+
+            output = axios.post(api_end_point,context.activity);
             const adaptInfo = {
-                text:context.activity.text,
+                text:input.text,
                 body:"satified with the answer?",
                 username:context.activity.from.name,
-                postFeedbackUrl: api_end_point
             } 
+            prevQuestion = adaptInfo.text;
+            
+            
             console.log(context.activity)
             const titleCard = CardFactory.adaptiveCard(JSON.parse(
-                JSON.stringify(feedBack).replace("${text}", adaptInfo.text).replace('${body}', adaptInfo.body).replace('${username}',adaptInfo.username).replace('${postFeedbackUrl}',adaptInfo.postFeedbackUrl)));
+                JSON.stringify(feedBack).replace("${text}", adaptInfo.text).replace('${body}', adaptInfo.body).replace('${username}',adaptInfo.username)));
             
             await context.sendActivity(MessageFactory.attachment(
             {
