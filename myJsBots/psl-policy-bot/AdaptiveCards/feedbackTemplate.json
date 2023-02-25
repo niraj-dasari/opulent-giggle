@@ -21,6 +21,12 @@
 		},
 		{
 			"type": "TextBlock",
+			"size": "Medium",
+			"weight": "Bolder",
+			"text": "   "
+		},
+		{
+			"type": "TextBlock",
 			"text": "Does this answer the question?"
 		}
     ],

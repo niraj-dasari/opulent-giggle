@@ -5,7 +5,9 @@ const { ActivityHandler, MessageFactory,Attachment, AttachmentLayoutTypes, CardF
 const axios = require('axios');
 const feedBack = require('./AdaptiveCards/feedbackTemplate.json');
 const moredetails = require('./AdaptiveCards/moreDetailsCard.json')
-let prevQuestionsAnswer = "";
+let prevQuestionsAnswer_policy = "";
+let prevQuestionsAnswer_personal = "";
+let prevAns;
 let prevContext;
 
 class EchoBot extends ActivityHandler {
@@ -39,14 +41,15 @@ class EchoBot extends ActivityHandler {
                 // await context.sendActivity(MessageFactory.text(context.activity.value.feedback));
                 let con = context.activity;
                 let payload ={
+                    context:context.activity,
                     username: prevContext.from.name,
                     question: prevContext.text,
-                    answer: prevQuestionsAnswer,
+                    answer: prevAns,
                     Timestamp: context.activity.timestamp,
                     feed_back:  context.activity.value?.value
                 }
                 con.question = prevContext.text;
-                con.answer = prevQuestionsAnswer;
+                con.answer = {prevQuestionsAnswer_policy,prevQuestionsAnswer_personal};
                 // con['previousAns'] = prevQuestionsAnswer;
                 // con['previouseQues']= prevContext.text;
                 console.log(con,payload);
@@ -56,8 +59,13 @@ class EchoBot extends ActivityHandler {
             }
 
             console.log(axios.post(api_end_point,context.activity));
-            prevQuestionsAnswer = axios.post(api_end_point,context.activity);
-            console.log(prevQuestionsAnswer);
+            prevAns = await axios.post(api_end_point,context.activity)
+            .then((result) => {
+                prevQuestionsAnswer_policy = result.data.answer.policy_answer;
+                prevQuestionsAnswer_personal = result.data.answer.personal_answer;
+            });
+
+            console.log("line 60"+prevAns);
             const adaptInfo = {
                 text:input.text,
                 body:"satified with the answer?",
@@ -68,7 +76,7 @@ class EchoBot extends ActivityHandler {
             
             console.log(context.activity)
             const titleCard = CardFactory.adaptiveCard(JSON.parse(
-                JSON.stringify(feedBack).replace("${text}", adaptInfo.text).replace('${body}', adaptInfo.body).replace('${username}',adaptInfo.username)));
+                JSON.stringify(feedBack).replace("${text}", prevQuestionsAnswer_policy).replace('${body}', adaptInfo.body).replace('${username}',adaptInfo.username)));
             
             await context.sendActivity(MessageFactory.attachment(
             {
