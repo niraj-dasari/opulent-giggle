@@ -13,7 +13,7 @@ class EchoBot extends ActivityHandler {
         this.onMessage(async (context, next) => {
             // const respose = axios.get('https://niraj-dasari-verbose-space-waffle-494p549v557fq56j-5000.preview.app.github.dev/get_text?data='+context.activity.text);
             const api_end_point = 'https://niraj-dasari-verbose-space-waffle-494p549v557fq56j-5000.preview.app.github.dev/get_text'
-            const res = axios.post(api_end_point,context)
+            const res = axios.post(api_end_point,context.activity);
             const adaptInfo = {
                 text:context.activity.text,
                 body:"satified with the answer?",
