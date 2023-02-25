@@ -2,47 +2,43 @@
     "type": "AdaptiveCard",
     "version": "1.0",
     "body": [
-        {
+		{
 			"type": "TextBlock",
 			"size": "Medium",
 			"weight": "Bolder",
+			"text": "Here! what i found...."
+		},
+        {
+			"type": "TextBlock",
+			"size": "Medium",
 			"text": "${text}"
 		},
 		{
 			"type": "TextBlock",
-			"text": "",
-			"wrap": true
+			"size": "Medium",
+			"weight": "Bolder",
+			"text": "   "
 		},
 		{
-			"type": "FactSet",
-			"facts": [
-				{
-					"title": "Was this helpful?",
-                    "value":""
-				}
-			]
+			"type": "TextBlock",
+			"text": "Does this answer the question?"
 		}
     ],
     "actions": [
         {
-			"type": "Action.ShowCard",
+			"type": "Action.Submit",
 			"title": "yes👍",
-			"card": {
-				"type": "AdaptiveCard",
-				"body": [
-					{
-						"type": "TextBlock",
-                        "text": "Thanks for your feedback ${username}!"
-					}
-				],
-				"$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
-			}
+			"data":{
+                "feedback":"we are glad to help you!",
+				"value":true
+            }
 		},
 		{
 			"type": "Action.Submit",
 			"title": "No👎",
             "data":{
-                "feedback":"Sorry, we will try to improve our service."
+                "feedback":"Sorry, we will try to improve our service.",
+				"value":false
             }
 
 		}

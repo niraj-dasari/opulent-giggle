@@ -1,0 +1,28 @@
+{
+    "type": "AdaptiveCard",
+    "body": [
+        {
+            "type": "TextBlock",
+            "size": "Medium",
+            "weight": "Bolder",
+            "text": "Thank you for your feedback!"
+        },
+        {
+            "type": "TextBlock",
+            "text": "Click [here](https://persistentsystems.sharepoint.com/sites/Pi/Company-Policies/Policies/Employee%20Insurance_India.pdf) to download policy document." ,
+            "wrap": true
+        },
+        {
+            "type": "TextBlock",
+            "text": "or",
+            "wrap": true
+        },
+        {
+            "type": "TextBlock",
+            "text": "Post your question on [Community portal](https://community.persistent.com/questions/ask/).",
+            "wrap": true
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.4"
+}

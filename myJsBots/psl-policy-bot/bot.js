@@ -4,7 +4,9 @@
 const { ActivityHandler, MessageFactory,Attachment, AttachmentLayoutTypes, CardFactory } = require('botbuilder');
 const axios = require('axios');
 const feedBack = require('./AdaptiveCards/feedbackTemplate.json');
-let prevQuestion = "";
+const moredetails = require('./AdaptiveCards/moreDetailsCard.json')
+let prevQuestionsAnswer = "";
+let prevContext;
 
 class EchoBot extends ActivityHandler {
     constructor() {
@@ -20,18 +22,48 @@ class EchoBot extends ActivityHandler {
             if(context.activity.value?.feedback)
             {
                 console.log('received feedback');
-                await context.sendActivity(MessageFactory.text(context.activity.value.feedback));
-                axios.get('https://niraj-dasari-verbose-space-waffle-494p549v557fq56j-5000.preview.app.github.dev?data='+prevQuestion);
+                if(!context.activity.value?.value)
+                {
+                    const replycard = CardFactory.adaptiveCard(JSON.parse(JSON.stringify(moredetails)));
+                    await context.sendActivity(MessageFactory.attachment({
+                        contentType: replycard.contentType,
+                        content: replycard.content,
+                        name: replycard.name
+                    }));
+                }
+                else
+                {
+                    await context.sendActivity(MessageFactory.text("we are glad to help you!"));
+                }
+
+                // await context.sendActivity(MessageFactory.text(context.activity.value.feedback));
+                let con = context.activity;
+                let payload ={
+                    username: prevContext.from.name,
+                    question: prevContext.text,
+                    answer: prevQuestionsAnswer,
+                    Timestamp: context.activity.timestamp,
+                    feed_back:  context.activity.value?.value
+                }
+                con.question = prevContext.text;
+                con.answer = prevQuestionsAnswer;
+                // con['previousAns'] = prevQuestionsAnswer;
+                // con['previouseQues']= prevContext.text;
+                console.log(con,payload);
+                axios.post(api_end_point,payload)
+                axios.get('https://niraj-dasari-verbose-space-waffle-494p549v557fq56j-5000.preview.app.github.dev?data='+prevContext.text);
                 return;
             }
 
-            output = axios.post(api_end_point,context.activity);
+            console.log(axios.post(api_end_point,context.activity));
+            prevQuestionsAnswer = axios.post(api_end_point,context.activity);
+            console.log(prevQuestionsAnswer);
             const adaptInfo = {
                 text:input.text,
                 body:"satified with the answer?",
                 username:context.activity.from.name,
             } 
-            prevQuestion = adaptInfo.text;
+            prevContext = context.activity;
             
             
             console.log(context.activity)
