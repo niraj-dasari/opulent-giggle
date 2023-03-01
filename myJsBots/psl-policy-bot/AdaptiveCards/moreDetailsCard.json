@@ -9,7 +9,7 @@
         },
         {
             "type": "TextBlock",
-            "text": "Click [here](https://persistentsystems.sharepoint.com/sites/Pi/Company-Policies/Policies/Employee%20Insurance_India.pdf) to download policy document." ,
+            "text": "Click [here](${url}) to download policy document." ,
             "wrap": true
         },
         {
