@@ -18,6 +18,15 @@ class EchoBot extends ActivityHandler {
 
         var input,output;
         this.onMessage(async (context, next) => {
+            let greetingRegex = /^(hello|hi|hey)\s*[a-zA-Z]*/i;
+            let mes= context.activity.text;
+            if(mes != null)
+            if(greetingRegex.test(mes?.toLocaleLowerCase()))
+            {
+                console.log('gretting message...');
+                await context.sendActivity(MessageFactory.text(`Hello ${context.activity.from.name}, how can i help you!`));
+                return
+            }
             // const respose = axios.get('https://niraj-dasari-verbose-space-waffle-494p549v557fq56j-5000.preview.app.github.dev/get_text?data='+context.activity.text);
             input = context.activity;
             var api_end_point = 'http://ec2-54-82-167-77.compute-1.amazonaws.com:5000/generate_response'
@@ -46,11 +55,11 @@ class EchoBot extends ActivityHandler {
                 });
                 // axios.get('https://niraj-dasari-verbose-space-waffle-494p549v557fq56j-5000.preview.app.github.dev?data='+prevContext.text);
                
-                console.log('received feedback',prevQuestionPolicyUrl);
+                console.log('received feedback=>',prevQuestionPolicyUrl);
                 if(!context.activity.value?.value)
                 {
                     console.log(prevQuestionPolicyUrl);
-                    const replycard = CardFactory.adaptiveCard(JSON.parse(JSON.stringify(moredetails).replace("${url}", prevQuestionPolicyUrl != null ?prevQuestionPolicyUrl:'https://persistentsystems.sharepoint.com/sites/Pi/Company-Policies/Policies/Employee%20Insurance_India.pdf?&OR=Teams-HL&CT=1677357769393&clickparams=eyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOiIyNy8yMzAxMDUwNTYwMCIsIkhhc0ZlZGVyYXRlZFVzZXIiOmZhbHNlfQ%3D%3D')));
+                    const replycard = CardFactory.adaptiveCard(JSON.parse(JSON.stringify(moredetails).replace("${url}", prevQuestionPolicyUrl != null ?prevQuestionPolicyUrl:'https://persistentsystems.sharepoint.com/sites/Pi/Search/SitePages/Policy.aspx?k=policy')));
                     await context.sendActivity(MessageFactory.attachment({
                         contentType: replycard.contentType,
                         content: replycard.content,
