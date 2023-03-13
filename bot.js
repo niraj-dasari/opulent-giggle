@@ -56,9 +56,18 @@ class EchoBot extends ActivityHandler {
                 // axios.get('https://niraj-dasari-verbose-space-waffle-494p549v557fq56j-5000.preview.app.github.dev?data='+prevContext.text);
                
                 console.log('received feedback=>',prevQuestionPolicyUrl);
-                if(!context.activity.value?.value)
-                {
-                    console.log(prevQuestionPolicyUrl);
+                const feedbackCard = CardFactory.adaptiveCard(feedbackCardJson);
+                await context.sendActivity({ attachments: [feedbackCard] });
+            
+                // Wait for the user to select a feedback option
+                const feedbackResponse = await context.activity.channelData.postBack;
+            
+                // Process the feedback and store it for analysis
+                if (feedbackResponse === 'thumbsUp') {
+                    await context.sendActivity('Thank you for your feedback!');
+                    // Process thumbs up feedback
+                } else if (feedbackResponse === 'thumbsDown') {
+                    // Process thumbs down feedback
                     const replycard = CardFactory.adaptiveCard(JSON.parse(JSON.stringify(moredetails).replace("${url}", prevQuestionPolicyUrl != null ?prevQuestionPolicyUrl:'https://persistentsystems.sharepoint.com/sites/Pi/Search/SitePages/Policy.aspx?k=policy')));
                     await context.sendActivity(MessageFactory.attachment({
                         contentType: replycard.contentType,
@@ -66,10 +75,7 @@ class EchoBot extends ActivityHandler {
                         name: replycard.name
                     }));
                 }
-                else
-                {
-                    await context.sendActivity(MessageFactory.text("we are glad to help you!"));
-                }
+
 
                  return;
             }

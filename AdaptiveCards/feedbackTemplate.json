@@ -24,25 +24,42 @@
 			"type": "TextBlock",
 			"text": "Does this answer the question?",
 			"weight":"Bolder"
-		}
+		},
+		{
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": 1,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "👍Yes",
+                            "horizontalAlignment": "Center"
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": 1,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "👎No",
+                            "horizontalAlignment": "Center"
+                        }
+                    ]
+                }
+            ]
+        }
     ],
     "actions": [
         {
-			"type": "Action.Submit",
-			"title": "Yes",
-			"data":{
-                "feedback":"we are glad to help you!",
-				"value":true
+            "type": "Action.Submit",
+            "title": "Submit",
+            "data": {
+                "type": "thumbsFeedback"
             }
-		},
-		{
-			"type": "Action.Submit",
-			"title": "No",
-            "data":{
-                "feedback":"Sorry, we will try to improve our service.",
-				"value":false
-            }
-
-		}
+        }
     ]
 }

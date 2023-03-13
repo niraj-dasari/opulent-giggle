@@ -1,4 +1,4 @@
 {
     "appService.defaultWebAppToDeploy": "/subscriptions/3ecab840-aaca-4933-9d17-16e922c2c1a2/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/pslbotui",
-    "appService.deploySubpath": "myJsBots/psl-policy-bot"
+    "appService.deploySubpath": ""
 }
